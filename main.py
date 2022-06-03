@@ -1,109 +1,29 @@
-import tkinter as tk
-
-import mysql.connector
-
 from tkinter import *
+from functools import partial
 
+def validateLogin(username, password):
+	print("username entered :", username.get())
+	print("password entered :", password.get())
+	return
 
-def submitact():
-    user = Username.get()
+#window
+tkWindow = Tk()  
+tkWindow.geometry('400x150')  
+tkWindow.title('Tkinter Login Form - pythonexamples.org')
 
-    passw = password.get()
+#username label and text entry box
+usernameLabel = Label(tkWindow, text="User Name").grid(row=0, column=0)
+username = StringVar()
+usernameEntry = Entry(tkWindow, textvariable=username).grid(row=0, column=1)  
 
-    print(f"The name entered by you is {user} {passw}")
+#password label and password entry box
+passwordLabel = Label(tkWindow,text="Password").grid(row=1, column=0)  
+password = StringVar()
+passwordEntry = Entry(tkWindow, textvariable=password, show='*').grid(row=1, column=1)  
 
-    logintodb(user, passw)
+validateLogin = partial(validateLogin, username, password)
 
+#login button
+loginButton = Button(tkWindow, text="Login", command=validateLogin).grid(row=4, column=0)  
 
-def logintodb(user, passw):
-    # If password is enetered by the
-
-    # user
-
-    if passw:
-
-        db = mysql.connector.connect(host="localhost",
-
-                                     user=user,
-
-                                     password=passw,
-
-                                     db="College")
-
-        cursor = db.cursor()
-
-
-
-    # If no password is enetered by the
-
-    # user
-
-    else:
-
-        db = mysql.connector.connect(host="localhost",
-
-                                     user=user,
-
-                                     db="College")
-
-        cursor = db.cursor()
-
-    # A Table in the database
-
-    savequery = "select * from STUDENT"
-
-    try:
-
-        cursor.execute(savequery)
-
-        myresult = cursor.fetchall()
-
-        # Printing the result of the
-
-        # query
-
-        for x in myresult:
-            print(x)
-
-        print("Query Executed successfully")
-
-
-
-    except:
-
-        db.rollback()
-
-        print("Error occured")
-
-
-root = tk.Tk()
-
-root.geometry("300x300")
-
-root.title("DBMS Login Page")
-
-# Defining the first row
-
-lblfrstrow = tk.Label(root, text="Username -", )
-
-lblfrstrow.place(x=50, y=20)
-
-Username = tk.Entry(root, width=35)
-
-Username.place(x=150, y=20, width=100)
-
-lblsecrow = tk.Label(root, text="Password -")
-
-lblsecrow.place(x=50, y=50)
-
-password = tk.Entry(root, width=35)
-
-password.place(x=150, y=50, width=100)
-
-submitbtn = tk.Button(root, text="Login",
-
-                      bg='blue', command=submitact)
-
-submitbtn.place(x=150, y=135, width=55)
-root.mainloop()
-
+tkWindow.mainloop()
